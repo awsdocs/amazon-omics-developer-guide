@@ -1,0 +1,3 @@
+# Why can't I create a workflow?<a name="workflow-creation"></a>
+
+If the error states "Zip file contains multiple workflow definition files", you will need to specify the main/master WDL or Nextflow file to use\. You can do this by entering in the main path to the file as part of the command \-\-main folder\_name/file\_name through the AWS CLI\. You can also do this using the main workflow definition file field for the console\.
