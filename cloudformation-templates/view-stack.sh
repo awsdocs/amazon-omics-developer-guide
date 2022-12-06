@@ -1,0 +1,1 @@
+aws cloudformation describe-stack-resources --stack-name omics-service-role

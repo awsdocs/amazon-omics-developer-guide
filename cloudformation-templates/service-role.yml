@@ -1,0 +1,77 @@
+Parameters:
+  bucketName:
+    Description: Bucket name
+    Type: String
+    Default: omics-*
+Resources:
+  serviceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+        - PolicyName: read-reference
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action:
+                - omics:*
+              #Resource: '*'
+              Resource: 
+                - !Sub arn:${AWS::Partition}:omics:${AWS::Region}:${AWS::AccountId}:sequenceStore/*
+                - !Sub arn:${AWS::Partition}:omics:${AWS::Region}:${AWS::AccountId}:referenceStore/*
+        - PolicyName: read-s3
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action: 
+                - s3:ListBucket
+                - s3:GetBucketLocation
+              Resource:
+                - !Sub arn:${AWS::Partition}:s3:::${bucketName}
+                #- !Sub arn:${AWS::Partition}:s3:::broad-references
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource:
+                - !Sub arn:${AWS::Partition}:s3:::${bucketName}/*
+                #- !Sub arn:${AWS::Partition}:s3:::broad-references/*
+        - PolicyName: write-s3
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action:
+                - s3:PutObject
+              Resource: !Sub arn:${AWS::Partition}:s3:::${bucketName}/*
+        - PolicyName: upload-logs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action: 
+                - logs:DescribeLogStreams
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: !Sub arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/omics/WorkflowLog:log-stream:*
+            - Effect: Allow
+              Action: 
+                - logs:CreateLogGroup
+              Resource: !Sub arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/omics/WorkflowLog:*
+      AssumeRolePolicyDocument: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "omics.amazonaws.com"
+                ]
+              }
+            }
+          ]
+        }

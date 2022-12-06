@@ -1,0 +1,1 @@
+aws cloudformation describe-stack-events --stack-name omics-service-role --query 'StackEvents[*].ResourceStatus'
