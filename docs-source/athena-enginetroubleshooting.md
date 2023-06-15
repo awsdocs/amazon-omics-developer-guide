@@ -1,3 +1,0 @@
-# Why can't I access my data store in Athena?<a name="athena-enginetroubleshooting"></a>
-
-If your annotation or variant store is visible but you are receiving an error message that says that access is denied, check which version of query engine you are using\. Only queries run using engine version 3 are supported\. To read more about Athena query engine versions, see the [Amazon Athena documentation](https://docs.aws.amazon.com/athena/latest/ug/engine-versions-changing.html)\. 
